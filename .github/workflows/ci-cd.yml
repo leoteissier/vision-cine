@@ -90,11 +90,14 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
           sudo rm -rf /var/www/vision-cine/frontend/*
           sudo rm -rf /var/www/vision-cine/backend/*
+          # Ensure directories exist
+          sudo mkdir -p /var/www/vision-cine/frontend
+          sudo mkdir -p /var/www/vision-cine/backend
           EOF
-
+      
           # Deploy frontend
           rsync -avz --delete frontend/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/vision-cine/frontend/
-
+      
           # Deploy backend
           rsync -avz --delete backend/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/vision-cine/backend/
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
