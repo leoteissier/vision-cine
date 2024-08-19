@@ -61,7 +61,6 @@ export default defineNuxtConfig({
     // The public key which is available within client-side
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
-      urlBase: process.env.NUXT_PUBLIC_URL_BASE,
     }
   },
 

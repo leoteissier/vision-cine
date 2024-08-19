@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { useRoute } from "nuxt/app";
 import { useAuthStore } from "~/stores/auth";
+import { onMounted } from "vue";
+import useCategory from "~/composables/useCategory";
 import DeleteModal from "~/components/Modals/DeleteModal.vue";
 import PatchModal from "~/components/Modals/PatchModal.vue";
+import handleSearch from "~/utils/handleSearch";
+import goToPage from "~/utils/goToPage";
 
 const route = useRoute();
 const categoryId = Number(route.params.id);

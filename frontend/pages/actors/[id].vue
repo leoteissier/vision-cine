@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRuntimeConfig } from "nuxt/app";
+import { onMounted } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import DeleteModal from "~/components/Modals/DeleteModal.vue";
 import PatchModal from "~/components/Modals/PatchModal.vue";
@@ -22,7 +23,7 @@ onMounted(async () => {
 });
 
 const config = useRuntimeConfig();
-const url = config.public.urlBase
+const url = config.public.apiBase
 </script>
 
 <template>

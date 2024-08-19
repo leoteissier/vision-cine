@@ -5,7 +5,7 @@ import { navigateTo, useRuntimeConfig } from 'nuxt/app';
 
 export default async function api(url: string, params: ApiParams = {}) {
     const config = useRuntimeConfig();
-    const BASE_URL = config.public.apiBase;
+    const BASE_URL = config.public.apiBase + '/api';
 
     const authStore = useAuthStore();
 

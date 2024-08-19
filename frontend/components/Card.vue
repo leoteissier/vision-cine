@@ -22,7 +22,7 @@ const goToDetails = (type: string, id: number) => {
 }
 
 const config = useRuntimeConfig();
-const url = config.public.urlBase
+const url = config.public.apiBase
 </script>
 
 <template>

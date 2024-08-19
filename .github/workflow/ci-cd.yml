@@ -1,0 +1,121 @@
+name: Build and Deploy Vision-Cine
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-generate-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Generate static files
+        run: |
+          cd frontend
+          npm run generate
+
+      - name: Update .env file for deployment
+        run: |
+          cd frontend
+          echo 'NUXT_PUBLIC_API_BASE="https://visioncine-api.leoteissier.fr"' > .env
+
+      - name: Upload frontend dist as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+  build-and-generate-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install Composer dependencies
+        run: |
+          cd backend
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Build backend
+        run: |
+          cd backend
+          php bin/console cache:warmup --env=prod
+
+      - name: Upload backend build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-build
+          path: backend/
+
+  deploy:
+    needs: [build-and-generate-frontend, build-and-generate-backend]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code (for SSH keys)
+        uses: actions/checkout@v3
+
+      - name: Download frontend dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Download backend build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-build
+          path: backend/
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Deploy frontend to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo rm -rf /var/www/vision-cine/frontend/*"
+          rsync -avz --delete frontend/dist/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/vision-cine/frontend/
+
+      - name: Deploy backend to VPS
+        run: |
+          rsync -avz --delete backend/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/vision-cine/backend/
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cd /var/www/vision-cine/backend && composer install --no-interaction --prefer-dist --optimize-autoloader"
+
+      - name: Deploy Apache configuration for frontend
+        run: |
+          echo "${{ secrets.APACHE_CONFIG_FRONTEND }}" | ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo tee /etc/apache2/sites-available/visioncine.conf > /dev/null"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            sudo a2ensite visioncine.conf
+          EOF
+
+      - name: Deploy Apache configuration for backend
+        run: |
+          echo "${{ secrets.APACHE_CONFIG_BACKEND }}" | ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo tee /etc/apache2/sites-available/visioncine-api.conf > /dev/null"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            sudo a2ensite visioncine-api.conf
+          EOF
+
+      - name: Restart Apache
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo systemctl reload apache2"
