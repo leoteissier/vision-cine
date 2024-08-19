@@ -28,14 +28,17 @@ RUN useradd -m symfonyuser
 
 # Copier les fichiers du projet dans le conteneur et donner les bonnes permissions
 WORKDIR /app
+
+# Copier les fichiers du projet dans le conteneur
 COPY . /app
+
 RUN chown -R symfonyuser:symfonyuser /app
 
 # Passer à l'utilisateur non-root
 USER symfonyuser
 
 # Installer les dépendances PHP
-RUN composer install --no-interaction --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader --prefer-dist
 
 # Exposer le port pour le serveur PHP
 EXPOSE 8000

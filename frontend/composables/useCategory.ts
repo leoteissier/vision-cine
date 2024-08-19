@@ -1,6 +1,9 @@
+import { navigateTo } from "#app";
+import { ref } from "vue";
 import CategorieService from "~/services/categoriesServices";
 import type Category from "~/interfaces/category";
 import type Movie from "~/interfaces/movie";
+
 export default function useCategory() {
     const isLoading = ref(false);
 
@@ -38,8 +41,10 @@ export default function useCategory() {
                 name: name.value,
             };
             const response = await CategorieService.getCategories(variables);
-            categories.value = response.data.categories.collection;
-            categoryTotalPages.value = response.data.categories.paginationInfo.lastPage;
+            if(response.data.categories =! null) {
+                categories.value = response.data.categories.collection;
+                categoryTotalPages.value = response.data.categories.paginationInfo.lastPage;
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -57,10 +62,12 @@ export default function useCategory() {
                 title: title.value,
             };
             const response = await CategorieService.getCategoryById(variables);
-            category.value = response.data.category;
-            movies.value = response.data.category.movies.collection;
-            categoryTotalPages.value = response.data.category.movies.paginationInfo.lastPage;
-            categoryMovieIds.value = response.data.category.movies.collection.map((movie: Movie) => movie.id);
+            if(response.data.categories =! null) {
+                category.value = response.data.category;
+                movies.value = response.data.category.movies.collection;
+                categoryTotalPages.value = response.data.category.movies.paginationInfo.lastPage;
+                categoryMovieIds.value = response.data.category.movies.collection.map((movie: Movie) => movie.id);
+            }
         } catch (error) {
             console.error(error);
         } finally {
@@ -81,7 +88,7 @@ export default function useCategory() {
         }
     };
 
-    const patchCategory = async (CategoryData: {}) => {
+    const patchCategory = async (CategoryData: { validated: boolean, id: string, name: string, mediaId: string, selectedMovies: string[]}) => {
         try {
             await CategorieService.patchCategory(CategoryData);
             await fetchCategories(); // Refresh categories after patching
