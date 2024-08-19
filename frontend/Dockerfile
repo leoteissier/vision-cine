@@ -4,13 +4,13 @@ FROM node:22
 # Crée un répertoire de travail
 WORKDIR /app
 
-# Copie les fichiers package.json et package-lock.json pour tirer parti du cache de Docker
+# Copier les fichiers package.json et package-lock.json pour tirer parti du cache de Docker
 COPY package*.json ./
 
-# Installe les dépendances
+# Installer les dépendances
 RUN npm install
 
-# Copie le reste de l'application
+# Copier le reste de l'application
 COPY . .
 
 # Build de l'application

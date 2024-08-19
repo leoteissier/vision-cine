@@ -1,7 +1,7 @@
 # Utiliser l'image officielle PHP avec FPM
 FROM php:8.2-fpm
 
-# Installer les dépendances nécessaires
+# Installer les dépendances nécessaires et les extensions PHP
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -11,28 +11,18 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    default-mysql-client
+    default-mysql-client \
+    && docker-php-ext-install intl mbstring pdo_mysql \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && curl -sS https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony*/bin/symfony /usr/local/bin/symfony \
+    && useradd -m symfonyuser
 
-# Installer les extensions PHP nécessaires
-RUN docker-php-ext-install intl mbstring pdo_mysql
-
-# Installer Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Installer Symfony CLI
-RUN curl -sS https://get.symfony.com/cli/installer | bash \
-    && mv /root/.symfony*/bin/symfony /usr/local/bin/symfony
-
-# Créer un utilisateur non-root pour l'exécution
-RUN useradd -m symfonyuser
-
-# Copier les fichiers du projet dans le conteneur et donner les bonnes permissions
+# Définir le répertoire de travail
 WORKDIR /app
 
 # Copier les fichiers du projet dans le conteneur
-COPY . /app
-
-RUN chown -R symfonyuser:symfonyuser /app
+COPY --chown=symfonyuser:symfonyuser . /app
 
 # Passer à l'utilisateur non-root
 USER symfonyuser
