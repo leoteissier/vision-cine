@@ -28,11 +28,6 @@ jobs:
           cd frontend
           npm run generate
 
-      - name: Update .env file for deployment
-        run: |
-          cd frontend
-          echo 'NUXT_PUBLIC_API_BASE="https://visioncine-api.leoteissier.fr"' > .env
-
       - name: Upload frontend dist as artifact
         uses: actions/upload-artifact@v3
         with:
@@ -55,6 +50,11 @@ jobs:
         run: |
           cd backend
           composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run database migrations
+        run: |
+          cd backend
+          php bin/console doctrine:migrations:migrate --no-interaction
 
       - name: Build backend
         run: |
@@ -100,21 +100,17 @@ jobs:
       - name: Deploy backend to VPS
         run: |
           rsync -avz --delete backend/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/vision-cine/backend/
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cd /var/www/vision-cine/backend && composer install --no-interaction --prefer-dist --optimize-autoloader"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "cd /var/www/vision-cine/backend && composer install --no-interaction --prefer-dist --optimize-autoloader && php bin/console doctrine:migrations:migrate --no-interaction"
 
       - name: Deploy Apache configuration for frontend
         run: |
           echo "${{ secrets.APACHE_CONFIG_FRONTEND }}" | ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo tee /etc/apache2/sites-available/visioncine.conf > /dev/null"
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            sudo a2ensite visioncine.conf
-          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo a2ensite visioncine.conf"
 
       - name: Deploy Apache configuration for backend
         run: |
           echo "${{ secrets.APACHE_CONFIG_BACKEND }}" | ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo tee /etc/apache2/sites-available/visioncine-api.conf > /dev/null"
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-            sudo a2ensite visioncine-api.conf
-          EOF
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "sudo a2ensite visioncine-api.conf"
 
       - name: Restart Apache
         run: |
