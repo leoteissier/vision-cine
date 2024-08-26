@@ -1,3 +1,8 @@
+import useActor from "~/composables/useActor";
+import useCategory from "~/composables/useCategory";
+import useMovie from "~/composables/useMovie";
+import handleSearch from "./handleSearch";
+
 const { title, fetchMovies } = useMovie();
 const { firstname, lastname, fetchActors } = useActor();
 const { name, fetchCategories } = useCategory();

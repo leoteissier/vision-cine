@@ -25,6 +25,9 @@ services:
       - DATABASE_URL=mysql://root:123456@mariadb:3306/db_symfony?serverVersion=10.8.8-MariaDB&charset=utf8mb4
     depends_on:
       - mariadb
+    volumes:
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   mariadb:
     image: mariadb:10.8.8
@@ -36,6 +39,7 @@ services:
       MYSQL_DATABASE: db_symfony
     volumes:
       - db_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest

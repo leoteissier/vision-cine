@@ -3,6 +3,7 @@ import { ref } from "vue";
 import CategorieService from "~/services/categoriesServices";
 import type Category from "~/interfaces/category";
 import type Movie from "~/interfaces/movie";
+import { useToast } from "#imports";
 
 export default function useCategory() {
     const isLoading = ref(false);
@@ -11,6 +12,7 @@ export default function useCategory() {
     const category = ref<Category>({
         name: '',
         validated: false,
+        mediaId: ''
     });
     const selectedCategories = ref<string[]>([]);
     const categoryMovieIds = ref<number[]>([]);
@@ -41,7 +43,7 @@ export default function useCategory() {
                 name: name.value,
             };
             const response = await CategorieService.getCategories(variables);
-            if(response.data.categories =! null) {
+            if (response.data.categories !== null) {
                 categories.value = response.data.categories.collection;
                 categoryTotalPages.value = response.data.categories.paginationInfo.lastPage;
             }
@@ -62,7 +64,7 @@ export default function useCategory() {
                 title: title.value,
             };
             const response = await CategorieService.getCategoryById(variables);
-            if(response.data.categories =! null) {
+            if (response.data.categories !== null) {
                 category.value = response.data.category;
                 movies.value = response.data.category.movies.collection;
                 categoryTotalPages.value = response.data.category.movies.paginationInfo.lastPage;

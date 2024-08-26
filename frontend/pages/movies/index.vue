@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import PostModal from "~/components/Modals/PostModal.vue";
 import CardSkeleton from "~/components/Skeletons/CardSkeleton.vue";
+import useMovie from "~/composables/useMovie";
+import handleSearch from "~/utils/handleSearch";
+import goToPage from "~/utils/goToPage";
 
 const {
   isLoading,

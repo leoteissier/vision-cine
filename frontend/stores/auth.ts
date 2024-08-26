@@ -5,11 +5,11 @@ export const useAuthStore = defineStore('auth', {
     persist: true,
     // State definition
     state: () => ({
-        token: null as string | null,
+        token: undefined as string | undefined,
         user: {
-            id: null as number | null,
-            username: null as string | null,
-            email: null as string | null,
+            id: undefined as number | undefined,
+            username: undefined as string | undefined,
+            email: undefined as string | undefined,
             roles: [] as string[],
             isAdministrator: false,
             isSuperAdministrator: false,
@@ -40,11 +40,11 @@ export const useAuthStore = defineStore('auth', {
             this.isAuthenticated = true;
         },
         logout() {
-            this.token = null;
+            this.token = undefined;
             this.user = {
-                id: null,
-                username: null,
-                email: null,
+                id: undefined,
+                username: undefined,
+                email: undefined,
                 roles: [],
                 isAdministrator: false,
                 isSuperAdministrator: false,

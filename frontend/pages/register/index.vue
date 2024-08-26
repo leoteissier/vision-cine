@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { navigateTo } from '#app';
 import { z } from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import type { FormSubmitEvent } from '#ui/types'
 import UserServices from "~/services/authsServices";
 import {computed, ref} from "vue";
 

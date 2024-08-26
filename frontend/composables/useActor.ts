@@ -1,6 +1,8 @@
+import { ref } from 'vue';
 import ActorService from '~/services/actorsServices';
 import type Actor from '~/interfaces/actor';
 import type Movie from "~/interfaces/movie";
+import { useToast } from '#imports';
 
 export default function useActor() {
     const isLoading = ref(false);

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { navigateTo } from "#app";
 import { useAuthStore } from "~/stores/auth";
 import { useProfilModalStore } from "~/stores/profilModal";
 
@@ -51,16 +52,16 @@ const logout = () => {
       </li>
     </ul>
     <ul v-if="useAuthStore().isAuthenticated">
-     <li class="flex items-center">
-       <ULink
-           to="/login"
-           active-class="text-primary"
-           inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-           @click="logout"
-       >
-         Logout
-       </ULink>
-     </li>
+      <li class="flex items-center">
+        <ULink
+            to="/login"
+            active-class="text-primary"
+            inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+            @click="logout"
+        >
+          Logout
+        </ULink>
+      </li>
       <li @click="profilModal.openModal()">
         <UAvatar :alt="useAuthStore().user.username" size="sm" class="cursor-pointer" />
       </li>
@@ -77,9 +78,9 @@ const logout = () => {
       </li>
       <li>
         <ULink
-           to="/login"
-           active-class="text-primary"
-           inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+          to="/login"
+          active-class="text-primary"
+          inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
         >
           Login
         </ULink>

@@ -1,3 +1,5 @@
+import { navigateTo } from "#app";
+
 export default function ({ error, redirect }: any) {
     if (error.statusCode === 404) {
         return navigateTo('/error/404');

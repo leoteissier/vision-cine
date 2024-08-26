@@ -1,7 +1,11 @@
 import { ref } from 'vue';
+import { navigateTo } from '#app';
+import { useToast } from '#imports';
 import MovieService from '~/services/moviesServices';
 import type Movie from '~/interfaces/movie';
 import type Actor from '~/interfaces/actor';
+import type Category from '~/interfaces/category';
+
 
 export default function useMovie() {
     const isLoading = ref(false);
@@ -22,7 +26,7 @@ export default function useMovie() {
     })
     const selectedMovies = ref<string[]>([]);
     const actors = ref<Actor[]>([]);
-    const categories = ref([]);
+    const categories = ref<Category[]>([]);
 
     // filtre
     const moviePage = ref(1);

@@ -32,7 +32,7 @@ const onChangePageMovieByCategoryId = async (newPage: number) => {
 };
 
 onMounted(async () => {
-    await fetchCategoryById(categoryId);
+  await fetchCategoryById(categoryId);
 });
 </script>
 

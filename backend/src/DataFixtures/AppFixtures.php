@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         $faker = \Faker\Factory::create();
 
         // Générer un nom de fichier d'image aléatoire pour l'user super admin
-        $randomImage = $faker->image($mediaDirectory, 480, 640, null, false); // Génère une image aléatoire et retourne le nom du fichier
+        $randomImage = $faker->image($mediaDirectory, 480, 640, null, false);
 
         $commonMediaObject = new MediaObject();
         $commonMediaObject->setFilePath($randomImage);
@@ -70,7 +70,7 @@ class AppFixtures extends Fixture
 
             // Créer un MediaObject unique pour chaque acteur
             $mediaObject = new MediaObject();
-            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false)); // Générer une image unique
+            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false));
             $mediaObject->setValidated(true);
             $manager->persist($mediaObject);
 
@@ -95,7 +95,7 @@ class AppFixtures extends Fixture
 
         foreach ($categoryNames as $categoryName) {
             $mediaObject = new MediaObject();
-            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false)); // Générer une image unique
+            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false));
             $mediaObject->setValidated(true);
             $manager->persist($mediaObject);
 
@@ -123,7 +123,7 @@ class AppFixtures extends Fixture
 
             // Créer un MediaObject unique pour chaque film
             $mediaObject = new MediaObject();
-            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false)); // Générer une image unique
+            $mediaObject->setFilePath($faker->image('public/media', 480, 640, null, false));
             $mediaObject->setValidated(true);
             $manager->persist($mediaObject);
 

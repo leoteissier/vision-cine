@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { reactive, ref } from 'vue';
+import useActor from '~/composables/useActor';
+import useCategory from '~/composables/useCategory';
+import useMovie from '~/composables/useMovie';
+
 const { deleteMovie } = useMovie();
 const { deleteActor } = useActor();
 const { deleteCategory } = useCategory();

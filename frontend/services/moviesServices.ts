@@ -100,7 +100,6 @@ export default {
 
     // Route Post -------------------------------
     async postMovie (variables: { validated: boolean, title: string, releaseDate: Date, synopsis: string, duration: number, score: number, entry: number, budget: number, director: string, website: string, mediaId: string, selectedActors: string[], selectedCategories: string[] }) {
-        console.log(variables)
         const query = `
         mutation createMovie($validated: Boolean!, $title: String!, $releaseDate: String, $synopsis: String!, $duration: Int!, $score: Float, $entry: Int, $budget: Int, $director: String, $website: String, $mediaId: String, $selectedActors: [String], $selectedCategories: [String]) {
             createMovie(input: {validated: $validated, title: $title, releaseDate: $releaseDate, synopsis: $synopsis, duration: $duration, score: $score, entry: $entry, budget: $budget, director: $director, website: $website, mediaObject: $mediaId, actors: $selectedActors, categories: $selectedCategories}) {
@@ -197,7 +196,6 @@ export default {
 
     // Route Delete -------------------------------
     async deleteMovie (variables: { id: string }) {
-        console.log(variables)
         const query = `
         mutation deleteMovie($id: ID!) {
             deleteMovie(input: {id: $id}) {

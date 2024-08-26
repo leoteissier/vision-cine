@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue';
+import useActor from '~/composables/useActor';
+import useCategory from '~/composables/useCategory';
+import useMediaUpload from '~/composables/useMediaUpload';
+import useMovie from '~/composables/useMovie';
+import goToPage from '~/utils/goToPage';
+import handleSearch from '~/utils/handleSearch';
+
 const {
   movies,
   movie,

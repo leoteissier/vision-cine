@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import { useProfilModalStore } from "~/stores/profilModal";
 import ProfilsServices from "~/services/profilsServices";

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import goToPage from "~/utils/goToPage";
+import { onMounted } from "vue";
 import { useAuthStore } from "~/stores/auth";
 import CardSkeleton from "~/components/Skeletons/CardSkeleton.vue";
 import PostModal from "~/components/Modals/PostModal.vue";
 import useActor from "~/composables/useActor";
+import goToPage from "~/utils/goToPage";
 
 const {
   isLoading,

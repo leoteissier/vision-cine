@@ -1,5 +1,8 @@
+import type MediaObject from "./mediaObject";
+
 export default interface Movie {
-    id?: number;
+    id?: string;
+    _id?: number;
     title: string;
     synopsis: string;
     releaseDate: string;
@@ -10,4 +13,5 @@ export default interface Movie {
     director: string;
     website: string;
     mediaId?: string;
+    mediaObject?: MediaObject;
 }

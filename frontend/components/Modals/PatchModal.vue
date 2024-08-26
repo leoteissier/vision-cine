@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue';
+import useActor from '~/composables/useActor';
+import useCategory from '~/composables/useCategory';
+import useMediaUpload from '~/composables/useMediaUpload';
+import useMovie from '~/composables/useMovie';
 import { formatDateToInput } from '~/utils/dateFormater';
+import goToPage from '~/utils/goToPage';
+import handleSearch from '~/utils/handleSearch';
 const {
   movies,
   movie,
@@ -66,7 +73,7 @@ const onSubmit = async () => {
       await PatchCategory()
       break;
     default:
-      console.log('Type non reconnu')
+      break;
   }
 }
 

@@ -102,7 +102,7 @@ const url = config.public.apiBase
           <UDivider class="mb-4" />
           <div class="flex gap-4">
             <div v-for="actor in actors" :key="actor.id">
-              <img :src="url + actor.mediaObject.contentUrl" alt="image" class="h-64">
+              <img v-if="actor.mediaObject" :src="url + actor.mediaObject.contentUrl" alt="image" class="h-64">
               <p>{{ actor.firstname }} {{ actor.lastname }}</p>
             </div>
           </div>

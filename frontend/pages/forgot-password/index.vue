@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { navigateTo } from '#imports';
+import { ref } from "vue";
 import { z } from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import type { FormSubmitEvent } from '#ui/types'
 import UserService from "~/services/authsServices";
 
 definePageMeta({

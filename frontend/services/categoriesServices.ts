@@ -84,7 +84,7 @@ export default {
     // Routes Post ------------------------------------------------------------
     async postCategory(variables: { validated: boolean, name: string, mediaId: string, selectedMovies: string[]  }) {
         const query = `
-       mutation createCategory($validated: Boolean!, $name: String!, $mediaId: String!, $selectedMovies: [String]){
+        mutation createCategory($validated: Boolean!, $name: String!, $mediaId: String!, $selectedMovies: [String]){
             createCategory(input: {validated: $validated, name: $name, mediaObject: $mediaId, movies: $selectedMovies}){
                 category{
                     id,

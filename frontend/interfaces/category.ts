@@ -1,8 +1,8 @@
 export default interface Category {
-    id?: number;
+    id?: string;
+    _id?: number;
     name: string;
-    mediaId?: string;
-    validated?: boolean;
-    mediaObject?: {};
+    mediaId: string;
+    validated: boolean;
     movies?: string[];
 }
